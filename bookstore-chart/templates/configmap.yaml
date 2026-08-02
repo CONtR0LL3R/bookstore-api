@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap.name }}
+data:
+  SERVER_PORT: {{ .Values.configMap.data.SERVER_PORT | quote }}
+  APP_NAME: {{ .Values.configMap.data.APP_NAME | quote }}
+  MAX_BOOKS: {{ .Values.configMap.data.MAX_BOOKS | quote }}

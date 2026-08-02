@@ -1,0 +1,86 @@
+# Book Store API Configuration
+bookstore:
+  name: bookstore
+  port: 8080
+  replicas: 2
+  image: bookstore-api
+  tag: "3.0"
+  imagePullPolicy: Never
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30004
+  resources:
+    requests:
+      cpu: "300m"
+      memory: "256Mi"
+    limits:
+      cpu: "750m"
+      memory: "512Mi"
+  livenessProbe:
+    path: /books
+    initialDelaySeconds: 45
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    path: /books
+    initialDelaySeconds: 35
+    periodSeconds: 5
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+# PostgreSQL Configuration
+postgres:
+  name: postgres
+  headless_service_name: postgres-headless
+  replicas: 1
+  image: postgres
+  tag: "16-alpine"
+  port: 5432
+  database: bookstoredb
+  storage:
+    size: 10Gi
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+# Frontend Configuration
+frontend:
+  name: frontend
+  replicas: 1
+  image: bookstore-frontend     # ← Change from nginx
+  tag: "2.0"                    # ← Change from latest
+  port: 80
+  imagePullPolicy: Never
+# Ingress Configuration
+# Ingress Configuration
+ingress:
+  enabled: true
+  name: bookstore-ingress           # ← ADD THIS LINE
+  className: nginx
+  host: bookstore.local
+  tls:
+    enabled: false
+
+# ConfigMap
+configMap:
+  name: bookstore-config
+  data:
+    SERVER_PORT: "8080"
+    APP_NAME: "My favorite BookStore API"
+    MAX_BOOKS: "100"
+
+# Secrets
+secrets:
+  postgres:
+    name: postgres-secret
+    username: bookstoreuser
+    password: bookstorepass123
+  bookstore:
+    name: bookstore-secret
+    password: mySuperSecret123

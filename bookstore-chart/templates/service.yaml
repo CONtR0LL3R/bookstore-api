@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.bookstore.name }}-service
+spec:
+  type: {{ .Values.bookstore.service.type }}
+  selector:
+    app: {{ .Values.bookstore.name }}
+  ports:
+    - port: {{ .Values.bookstore.service.port }}
+      targetPort: {{ .Values.bookstore.port }}
+      nodePort: {{ .Values.bookstore.service.nodePort }}

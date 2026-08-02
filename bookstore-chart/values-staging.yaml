@@ -1,0 +1,46 @@
+# =============================
+# STAGING ENVIRONMENT
+# =============================
+
+bookstore:
+  replicas: 2
+  tag: "3.0"
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30005
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  livenessProbe:
+    initialDelaySeconds: 120    # ← Give enough time!
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 5
+  readinessProbe:
+    initialDelaySeconds: 100    # ← Give enough time!
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+
+postgres:
+  replicas: 1
+  storage:
+    size: 5Gi
+
+frontend:
+  replicas: 1
+
+ingress:
+  host: staging.bookstore.local
+
+configMap:
+  name: bookstore-config
+  data:
+    SERVER_PORT: "8080"
+    APP_NAME: "BookStore STAGING"
+    MAX_BOOKS: "50"

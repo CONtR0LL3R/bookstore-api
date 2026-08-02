@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.bookstore.name }}-deployment
+spec:
+  replicas: {{ .Values.bookstore.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.bookstore.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.bookstore.name }}
+    spec:
+      containers:
+        - name: {{ .Values.bookstore.name }}-container
+          image: {{ .Values.bookstore.image }}:{{ .Values.bookstore.tag }}
+          imagePullPolicy: {{ .Values.bookstore.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.bookstore.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.configMap.name }}
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          resources:
+            requests:
+              cpu: {{ .Values.bookstore.resources.requests.cpu | quote }}
+              memory: {{ .Values.bookstore.resources.requests.memory | quote }}
+            limits:
+              cpu: {{ .Values.bookstore.resources.limits.cpu | quote }}
+              memory: {{ .Values.bookstore.resources.limits.memory | quote }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.bookstore.livenessProbe.path }}
+              port: {{ .Values.bookstore.port }}
+            initialDelaySeconds: {{ .Values.bookstore.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bookstore.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.bookstore.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.bookstore.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.bookstore.readinessProbe.path }}
+              port: {{ .Values.bookstore.port }}
+            initialDelaySeconds: {{ .Values.bookstore.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bookstore.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.bookstore.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.bookstore.readinessProbe.failureThreshold }}

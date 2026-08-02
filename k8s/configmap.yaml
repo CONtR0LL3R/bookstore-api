@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bookstore-config
+data:
+  SERVER_PORT: "8080"
+  APP_NAME: "My favorite BookStore API"
+  MAX_BOOKS: "100"

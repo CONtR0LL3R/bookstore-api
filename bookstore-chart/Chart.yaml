@@ -1,0 +1,9 @@
+apiVersion: v2
+name: bookstore
+description: A complete Book Store application with PostgreSQL and frontend
+type: application
+version: 1.0.0
+appVersion: 3.0
+maintainers:
+  - name: Your Name
+    email: your.email@example.com

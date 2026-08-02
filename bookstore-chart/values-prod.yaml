@@ -1,0 +1,46 @@
+# =============================
+# PRODUCTION ENVIRONMENT
+# =============================
+
+bookstore:
+  replicas: 3                    # Reduced for Minikube
+  tag: "3.0"
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30006              # ← Different from dev(30004) staging(30005)
+  resources:
+    requests:
+      cpu: "300m"
+      memory: "256Mi"
+    limits:
+      cpu: "750m"
+      memory: "512Mi"
+  livenessProbe:
+    initialDelaySeconds: 120     # ← Fixed!
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    initialDelaySeconds: 100     # ← Fixed!
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+postgres:
+  replicas: 1
+  storage:
+    size: 100Gi
+
+frontend:
+  replicas: 2                    # Reduced for Minikube
+
+ingress:
+  host: bookstore.local
+
+configMap:
+  name: bookstore-config
+  data:
+    SERVER_PORT: "8080"
+    APP_NAME: "BookStore"
+    MAX_BOOKS: "100"
