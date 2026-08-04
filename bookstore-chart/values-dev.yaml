@@ -3,7 +3,7 @@
 # =============================
 
 bookstore:
-  replicas: 1
+  replicas: 2
   tag: "3.0"
   resources:
     requests:
