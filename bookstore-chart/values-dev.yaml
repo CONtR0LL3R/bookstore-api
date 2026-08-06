@@ -38,5 +38,5 @@ configMap:
   name: bookstore-config
   data:
     SERVER_PORT: "8080"
-    APP_NAME: "BookStore DEV"
+    APP_NAME: "BookStore DEV v2"
     MAX_BOOKS: "10"
