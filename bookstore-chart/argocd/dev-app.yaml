@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bookstore-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/CONtR0LL3R/bookstore-api.git
+    targetRevision: main
+    path: bookstore-chart
+    helm:
+      valuesFiles:
+        - values-dev.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

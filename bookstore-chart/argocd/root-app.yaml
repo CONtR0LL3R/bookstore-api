@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bookstore-root
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/CONtR0LL3R/bookstore-api.git
+    targetRevision: main
+    path: bookstore-chart/argocd
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
