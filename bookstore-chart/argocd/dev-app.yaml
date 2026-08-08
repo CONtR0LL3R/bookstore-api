@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/CONtR0LL3R/bookstore-api.git
-    targetRevision: main
+    targetRevision: argo        # ← Changed to argo branch
     path: bookstore-chart
     helm:
       valuesFiles:
