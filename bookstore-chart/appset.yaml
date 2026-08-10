@@ -21,7 +21,7 @@ spec:
             nodePort: "30006"
           - env: qa
             namespace: qa
-            valuesFile: values-dev.yaml  # reuse dev values
+            valuesFile: values-qa.yaml  # reuse dev values
             nodePort: "30007"
   template:
     metadata:
