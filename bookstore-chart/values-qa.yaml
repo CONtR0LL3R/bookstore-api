@@ -1,0 +1,43 @@
+# values-qa.yaml
+bookstore:
+  replicas: 1
+  tag: "3.0"
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30007       # ← Different port!
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  livenessProbe:
+    initialDelaySeconds: 120
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 5
+  readinessProbe:
+    initialDelaySeconds: 100
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+
+postgres:
+  replicas: 1
+  storage:
+    size: 1Gi
+
+frontend:
+  replicas: 1
+
+ingress:
+  host: qa.bookstore.local  # ← Different hostname!
+
+configMap:
+  name: bookstore-config
+  data:
+    SERVER_PORT: "8080"
+    APP_NAME: "BookStore QA"  # ← Different name!
+    MAX_BOOKS: "10"

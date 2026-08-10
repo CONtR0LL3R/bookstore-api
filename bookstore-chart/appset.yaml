@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bookstore-appset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+            namespace: dev
+            valuesFile: values-dev.yaml
+            nodePort: "30004"
+          - env: staging
+            namespace: staging
+            valuesFile: values-staging.yaml
+            nodePort: "30005"
+          - env: prod
+            namespace: prod
+            valuesFile: values-prod.yaml
+            nodePort: "30006"
+          - env: qa
+            namespace: qa
+            valuesFile: values-dev.yaml  # reuse dev values
+            nodePort: "30007"
+  template:
+    metadata:
+      name: 'bookstore-{{env}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/CONtR0LL3R/bookstore-api.git
+        targetRevision: argo
+        path: bookstore-chart
+        helm:
+          valueFiles:
+            - '{{valuesFile}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
