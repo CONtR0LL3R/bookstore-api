@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.frontend.name }}-deployment
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+
 spec:
   replicas: {{ .Values.frontend.replicas }}
   selector:
