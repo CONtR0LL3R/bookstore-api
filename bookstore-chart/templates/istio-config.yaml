@@ -1,3 +1,4 @@
+{{- if .Values.bookstore_v2 }}
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -33,3 +34,4 @@ spec:
             host: bookstore-service
             subset: v2
           weight: 10
+  {{- end }}

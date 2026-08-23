@@ -23,6 +23,12 @@ bookstore:
     timeoutSeconds: 5
     failureThreshold: 5
 
+bookstore_v2:        # ← new section
+  tag: "4.0"
+  version: v2
+  replicas: 1
+
+
 postgres:
   replicas: 1
   storage:
