@@ -34,6 +34,6 @@ public class BookController {
     @DeleteMapping("/{id}")
     public String deleteBook(@PathVariable int id) {
         bookRepository.deleteById(id);
-        return "Book " + id + " deleted successfully!";
+        return "Book " + id + " deleted successfully! - v2 🚀";
     }
 }

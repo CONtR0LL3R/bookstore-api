@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: bookstore-gateway
+  namespace: default
+spec:
+  # Target the default istio ingress gateway deployment.
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "bookstore.local"

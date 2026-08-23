@@ -1,0 +1,22 @@
+# Weighted canary: 90% v3 / 10% v4 of the bookstore API.
+# Apply this INSTEAD of the "bookstore-mesh" VirtualService while canarying.
+# The subsets (v3/v4) only work because destination-rule.yaml defines them.
+# Prereq: pods must carry a "version" label (v3/v4), e.g. two Deployments of the API.
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: bookstore-canary
+  namespace: default
+spec:
+  hosts:
+    - bookstore-service
+  http:
+    - route:
+        - destination:
+            host: bookstore-service
+            subset: v3
+          weight: 90
+        - destination:
+            host: bookstore-service
+            subset: v4
+          weight: 10

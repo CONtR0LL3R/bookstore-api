@@ -1,0 +1,33 @@
+# DestinationRule = HOW traffic to bookstore-service is load-balanced and protected,
+# plus the subsets that VirtualService canary rules reference.
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: bookstore-dr
+  namespace: default
+spec:
+  host: bookstore-service
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_REQUEST
+    tls:
+      # Make Envoy use the mesh mTLS certs when talking to this host.
+      # PeerAuthentication (STRICT) is the other, policy-level way to require mTLS.
+      mode: ISTIO_MUTUAL
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 10
+    outlierDetection:
+      # Circuit breaker: eject a pod after 3 x 5xx for 30s. Complements the k8s probes.
+      consecutive5xxErrors: 3
+      interval: 10s
+      baseEjectionTime: 30s
+  subsets:
+    - name: v3
+      labels:
+        version: v3
+    - name: v4
+      labels:
+        version: v4

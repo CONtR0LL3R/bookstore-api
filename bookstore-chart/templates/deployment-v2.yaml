@@ -1,23 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.bookstore.name }}-deployment
+  name: {{ .Values.bookstore.name }}-deployment-v2    # ← CHANGED
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  replicas: {{ .Values.bookstore.replicas }}
+  replicas: {{ .Values.bookstore_v2.replicas }}        # ← CHANGED
   selector:
     matchLabels:
       app: {{ .Values.bookstore.name }}
+      version: {{ .Values.bookstore_v2.version }}      # ← CHANGED
   template:
     metadata:
       labels:
         app: {{ .Values.bookstore.name }}
-        version: {{ .Values.bookstore.version }}
+        version: {{ .Values.bookstore_v2.version }}    # ← CHANGED
     spec:
       containers:
-        - name: {{ .Values.bookstore.name }}-container
-          image: {{ .Values.bookstore.image }}:{{ .Values.bookstore.tag }}
+        - name: {{ .Values.bookstore.name }}-container-v2     # ← CHANGED
+          image: {{ .Values.bookstore.image }}:{{ .Values.bookstore_v2.tag }}  # ← CHANGED
           imagePullPolicy: {{ .Values.bookstore.imagePullPolicy }}
           ports:
             - containerPort: {{ .Values.bookstore.port }}

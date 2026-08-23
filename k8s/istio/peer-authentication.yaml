@@ -1,0 +1,11 @@
+# mTLS at the NAMESPACE level: every connection between sidecars in "default"
+# must be mutual TLS. WARNING: only apply after every workload in the namespace
+# has a sidecar, or non-mesh clients (curl pods, plain HTTP) get cut off.
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: default
+spec:
+  mtls:
+    mode: STRICT

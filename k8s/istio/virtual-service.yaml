@@ -1,0 +1,51 @@
+# External entry: what the browser sees via the ingress gateway.
+# Replaces k8s/ingress.yaml. Gateway = "what may come in", VS = "what happens to it".
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: bookstore
+  namespace: default
+spec:
+  hosts:
+    - "bookstore.local"
+  gateways:
+    - bookstore-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /api
+      # Same as the nginx "rewrite-target: /$2": strip /api so Spring sees /books.
+      rewrite:
+        uri: ""
+      route:
+        - destination:
+            host: bookstore-service
+            port:
+              number: 80
+    - route:
+        - destination:
+            host: frontend-service
+            port:
+              number: 80
+---
+# Internal mesh traffic (frontend pod -> bookstore-service) adds timeouts + retries.
+# Note: "gateways: [mesh]" is implicit when the gateways field is omitted.
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: bookstore-mesh
+  namespace: default
+spec:
+  hosts:
+    - bookstore-service
+  http:
+    - timeout: 3s
+      retries:
+        attempts: 3
+        perTryTimeout: 1s
+        retryOn: connect-failure,refused-stream,5xx
+      route:
+        - destination:
+            host: bookstore-service
+            port:
+              number: 80

@@ -5,6 +5,7 @@ bookstore:
   replicas: 2
   image: bookstore-api
   tag: "3.0"
+  version: v1
   imagePullPolicy: Never
   service:
     type: NodePort
@@ -29,6 +30,11 @@ bookstore:
     periodSeconds: 5
     timeoutSeconds: 5
     failureThreshold: 3
+
+bookstore_v2:        # ← new section
+  tag: "4.0"
+  version: v2
+  replicas: 1
 
 # PostgreSQL Configuration
 postgres:

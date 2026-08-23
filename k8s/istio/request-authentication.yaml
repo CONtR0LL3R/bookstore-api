@@ -1,0 +1,16 @@
+# JWT validation at the proxy. RequestAuthentication only VALIDATES tokens that
+# are present; it does not deny requests without one. Pair it with
+# AuthorizationPolicy (or the app) to actually gate access.
+# Uses Istio's public demo JWKS so you can try it with the sample token.
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: bookstore-jwt
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: bookstore
+  jwtRules:
+    - issuer: "testing@secure.istio.io"
+      jwksUri: "https://raw.githubusercontent.com/istio/istio/master/security/tools/jwt/samples/demo.jwks"

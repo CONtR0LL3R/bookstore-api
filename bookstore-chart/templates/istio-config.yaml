@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: bookstore-destination-rule
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  host: bookstore-service
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: bookstore-virtual-service
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  hosts:
+    - bookstore-service
+  http:
+    - route:
+        - destination:
+            host: bookstore-service
+            subset: v1
+          weight: 90
+        - destination:
+            host: bookstore-service
+            subset: v2
+          weight: 10
