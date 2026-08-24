@@ -48,9 +48,9 @@ spec:
         - destination:
             host: bookstore-service
             subset: v1
-          weight: 90
+          weight: 50
         - destination:
             host: bookstore-service
             subset: v2
-          weight: 10
+          weight: 50
   {{- end }}
