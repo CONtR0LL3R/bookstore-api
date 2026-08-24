@@ -45,10 +45,10 @@ spec:
     - bookstore-gateway
   http:
     - fault:
-        abort:
+        delay:
           percentage:
             value: 100
-          httpStatus: 503
+          fixedDelay: 5s
       route:
         - destination:
             host: bookstore-service
