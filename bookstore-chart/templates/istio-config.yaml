@@ -49,7 +49,7 @@ spec:
           percentage:
             value: 100
           httpStatus: 503
-    - route:
+      route:
         - destination:
             host: bookstore-service
             subset: v1
