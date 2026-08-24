@@ -44,6 +44,11 @@ spec:
   gateways:
     - bookstore-gateway
   http:
+    - fault:
+        abort:
+          percentage:
+            value: 100
+          httpStatus: 503
     - route:
         - destination:
             host: bookstore-service
