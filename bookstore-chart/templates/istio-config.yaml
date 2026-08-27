@@ -44,16 +44,21 @@ spec:
   gateways:
     - bookstore-gateway
   http:
-    - fault:
+    - match:
+        - headers:
+            x-chaos:
+              exact: "on"
+      fault:
         delay:
           percentage:
-            value: 20
+            value: 100
           fixedDelay: 5s
       route:
         - destination:
             host: bookstore-service
-            subset: v1
-          weight: 0
+            subset: v2
+          weight: 100
+    - route:
         - destination:
             host: bookstore-service
             subset: v2
