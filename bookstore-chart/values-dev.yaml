@@ -24,7 +24,7 @@ bookstore:
     failureThreshold: 5
 
 bookstore_v2:        # ← new section
-  tag: "4.0"
+  tag: "v6"
   version: v2
   replicas: 1
 
